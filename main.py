@@ -402,6 +402,14 @@ async def on_message(message):
 May Chael ever watch over your rolls and Phyth never weave them for you... Enjoy!
     """
     await message.channel.send(helpfile)
+
+# Export all d100 rolls in the database (debugging)
+  if msg == "*roll d100dump":
+    value = db["d100"]
+    await message.channel.send(value)
+    return
+    
+# main listener
   if msg.startswith("*roll "):
     comment = 0
     for i in msg: 
@@ -428,12 +436,11 @@ May Chael ever watch over your rolls and Phyth never weave them for you... Enjoy
     if user == "Dom":
       await message.channel.send('Iscus is offended by your disparaging remarks about her and refuses to answer your prayers.  Instead, your fate must now be goverened by pseudo-random rolls of Dice Maiden or Dice Golem, good luck...')
       return
-    """
     
     if user == "The Rust":
       await message.channel.send('That bitch Ulrik is fired. https://discord.com/channels/723614458676641943/735513833598091344/836479435389534228  Iscus ignores his prayers and his fate must now be goverened by the pseudo-random rolls of Dice Maiden or Dice Golem, good luck...')
       return
-   
+   """
     if NumFactors == 3: 
       #this is the most complex expression supported, something like *roll 2d6+2+1d4-1 * some comment
         minus = re.compile('-') 
