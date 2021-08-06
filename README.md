@@ -1,4 +1,4 @@
-#Iscus, The Lady of Our Fate, is a dice bot for Discord
+#Iscus, The Lady of Our Fate, is a dice bot for Discord designed to run on Replit.com
       All rolls are drawn from RANDOM.ORG
       See: (https://www.random.org/)
 
