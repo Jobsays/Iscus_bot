@@ -191,7 +191,7 @@ async def on_ready():
 @bot.command(name='about', help='Responds with info about using the bot')
 async def about(ctx):
     helpfile = """
-    __**The Lady of Our Fate, is a dice bot for Discord**__
+    __**Iscus, The Lady of Our Fate, is a dice bot for Discord**__
       *All rolls are drawn from RANDOM.ORG*
       *See: https://www.random.org/*
 
@@ -213,7 +213,7 @@ async def about(ctx):
       > Improved uptime from: 1) Code change to reduce chance of bot going offline due to Discord API rate limiting, 2) Bot now hosted on a Docker container on Job's network, rather than on Replit.com's free service
 
     **Known issues:**
-      > Discord.py v2.x beta library used... Breaking changes may occur when the official verions is released
+      > Discord.py v2.x beta library used... Breaking changes may occur when the official verion is released
       > Not all error handling cases discovered yet; I'm sure your fat fingers will point out bugs before long...
       > Only these dice types are supported: d100,d20, d12, d10, d8, d6, d4, d3, and d2.  You can't roll a d7 for example.
 
@@ -248,6 +248,7 @@ async def roll(ctx, RollPattern):
       else: 
         ErrorMsg = "Only d100, d20, d12, d10, d8, d6, d4, d3, d2 are supported."
         await ctx.send(ErrorMsg)
+        return
     if FactorCount == 3: #there are two factors joined by a + or - like 1d8+1 or 1d6+1d4
       passFactor = RollFactors[0]
       Factor1 = parse_factor(passFactor)
