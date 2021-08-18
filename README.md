@@ -11,6 +11,9 @@
 * You can add a comment to a roll by adding a space after the roll expression and typing whatever you want, like: ?roll 1d100 Ragnar Trident(85)
 * Type ?help about or just ?about to see this info in Discord
 
+**New Features in v2.1:**
+* Added the command ?skill that will calculate your degree of success based on your skill % like: ?skill 46 Swim
+
 **New Features in v2.0:**
       
 * Now will respond in Discord threads! Requires installing [Discord.py](https://github.com/Rapptz/discord.py) beta v2.x or higher like: 
