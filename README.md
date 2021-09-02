@@ -11,8 +11,9 @@
 * You can add a comment to a roll by adding a space after the roll expression and typing whatever you want, like: ?roll 1d100 Ragnar Trident(85)
 * Type ?help about or just ?about to see this info in Discord
 
-**New Features in v2.1:**
+**New Features in v2.1.1:**
 * Added the command ?skill that will calculate your degree of success based on your skill % like: ?skill 46 Swim
+* Fixed and issue with the the command ?skill for RuneQuest so a d100 result of >95 always fails. 
 
 **New Features in v2.0:**
       
