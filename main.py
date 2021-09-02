@@ -5,6 +5,7 @@ import json
 import re
 from discord.ext import commands
 from dotenv import load_dotenv
+import math
 
 load_dotenv()
 
@@ -201,6 +202,10 @@ async def about(ctx):
       > You can add a comment to a roll by adding a space after the roll expression and typing whatever you want, like: ?roll 1d100 Job Trident(85)
       > Type ?help about or just ?about to see this info later
 
+   **New Features in v2.1.1:**
+      > Added the command ?skill that will calculate your degree of success based on your skill % like: ?skill 46 Swim
+      >Fixed and issue with the the command ?skill for RuneQuest so a d100 result of >95 always fails.
+
     **New Features in v2.0:**
       > She now will respond in threads!
       > *roll changed to ?roll to make it one less tap from a mobile phone
@@ -213,7 +218,7 @@ async def about(ctx):
       > Improved uptime from: 1) Code change to reduce chance of bot going offline due to Discord API rate limiting, 2) Bot now hosted on a Docker container on Job's network, rather than on Replit.com's free service
 
     **Known issues:**
-      > Discord.py v2.x beta library used... Breaking changes may occur when the official verion is released
+      > Discord.py v2.x beta library used... Breaking changes may occur when the official version is released
       > Not all error handling cases discovered yet; I'm sure your fat fingers will point out bugs before long...
       > Only these dice types are supported: d100,d20, d12, d10, d8, d6, d4, d3, and d2.  You can't roll a d7 for example.
 
@@ -327,5 +332,37 @@ async def roll(ctx, RollPattern):
 async def ping(ctx):
   messageReply = "I await your actions to reveal your fate..."
   await ctx.send(messageReply)
+
+#bot skill command
+@bot.command(name='skill', help='accepts a skill % as a number and responds with the degree of success or failure based on a 1d100 roll.')
+async def skill(ctx, Skill):
+  #ensure that an integer was entered after the word skill
+  try: 
+    int(Skill)
+  except ValueError:
+    messageReply = "To roll vs. your skill you must enter your skill % as a number like ?skill 51"
+    await ctx.send(messageReply)
+  finally: #roll 1d100 vs the skill
+    DiceSides = 100
+    Skill = int(Skill)
+    Roll = int(parse_roll(DiceSides))
+    if Roll <= int(math.ceil(Skill/20)) or Roll == 1: #was a Critical rolled rounding up?
+      emoji = '<:crit:872962421097123931>'
+      await ctx.send("{} rolls a {}, Critical! {}".format(ctx.message.author.display_name, Roll, emoji))
+    elif Roll >= (101-(100-Skill)/20) or Roll==100: #was a Fumble rolled rounding down?
+      emoji = ':football:'
+      await ctx.send("{} rolls a {}, Fumble {}".format(ctx.message.author.display_name, Roll, emoji)) 
+    elif Roll <= int(math.ceil(Skill/5)): #was a Special rolled rounding up?
+      emoji = '<:special:872964395330863144>'
+      await ctx.send("{} rolls a {}, Special! {}".format(ctx.message.author.display_name, Roll, emoji))
+    elif Roll > Skill or Roll >=96: #was a Failure rolled?
+      emoji = ':thumbsdown:'
+      await ctx.send("{} rolls a {}, Failure {}".format(ctx.message.author.display_name, Roll, emoji)) 
+    elif Roll <= Skill: #was a Success rolled?
+      emoji = ':thumbsup:'
+      await ctx.send("{} rolls a {}, Success! {}".format(ctx.message.author.display_name, Roll, emoji)) 
+    else:
+      messageReply = "Oops, something went wrong"
+      await ctx.send(messageReply)
 
 bot.run(os.getenv('TOKEN'))
