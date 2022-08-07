@@ -6,7 +6,7 @@
 
 
 **How to install:**
-* (optional) create a Docker container to run your bot using 
+* (optional) create a Docker container to run your bot using docker.yaml as an example
 * download all files from this repository onto your server that will host the bot
 * Create an account on random.org and get your API key.  Add this key to the env.env file and rename it to just .env on your server to make it a hidden file
 * do the normal steps to get a Discord bot token and add your application token to the .env file: https://youtu.be/SPTfmiYiuok
