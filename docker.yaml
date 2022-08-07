@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+    discord-bot:
+        image: python:3.9.6-bullseye
+        container_name: discord-bot
+        volumes:
+            - /share/Container/iscus:/data
+        working_dir: /data
+        command: /bin/sh -c "pip install -r requirements.txt && python main.py"
+        restart: always
