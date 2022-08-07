@@ -43,7 +43,7 @@
     
 **Known issues:**
       
-* Discord.py v2.x beta library used... Breaking changes may occur when the official verion is released
+* Updates to Discord.py may cause breaking changes to this bot.  It was compatible as of 8/7/2022: https://discord.com/channels/336642139381301249/381965829857738772/1003818895825698817.  Check for updates here: https://github.com/Rapptz/discord.py
 * Not all error handling cases discovered yet; I'm sure your fat fingers will point out bugs before long...
 * Only these dice types are supported: d100,d20, d12, d10, d8, d6, d4, d3, and d2.  You can't roll a d7 for example.
 
