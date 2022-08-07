@@ -4,6 +4,14 @@
       See: (https://www.random.org/)
       This bot is designed to run in memory on a server or container of your choice
 
+
+**How to install:**
+* (optional) create a Docker container to run your bot using 
+* download all files from this repository onto your server that will host the bot
+* Create an account on random.org and get your API key.  Add this key to the env.env file and rename it to just .env on your server to make it a hidden file
+* do the normal steps to get a Discord bot token and add your application token to the .env file: https://youtu.be/SPTfmiYiuok
+* Launch your bot using Docker or install the requirements from requirements.txt manually and launch with "python main.py"
+
 **How to use:**
       
 * Type a message beginning with ?roll followed by a dice expression. Example: ?roll 1d100
