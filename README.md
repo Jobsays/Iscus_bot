@@ -11,6 +11,11 @@
 * You can add a comment to a roll by adding a space after the roll expression and typing whatever you want, like: ?roll 1d100 Ragnar Trident(85)
 * Type ?help about or just ?about to see this info in Discord
 
+**New Features in v3.0:**
+      
+* Made the bot compatible with the latest version of discord.py and Discord's new API
+* Added the ?pick command to allow the GM to randomly pick from a list of comma separated names (IMPORTANT: don't add spaces after the commas!). Example: ?pick person1,person2,person3 takes random damage
+
 **New Features in v2.1.1:**
 * Added the command ?skill that will calculate your degree of success based on your skill % like: ?skill 46 Swim
 * Fixed and issue with the the command ?skill for RuneQuest so a d100 result of >95 always fails. 
