@@ -7,6 +7,10 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import math
 
+intents = discord.Intents.default()  # All but the THREE privileged ones
+intents.message_content = True  # Subscribe to the Message Content intent
+#bot = commands.Bot(command_prefix='-', intents=intents)  # Pass the intents into your commands.Bot or discord.Client
+
 load_dotenv()
 
 d100s = []
@@ -136,8 +140,7 @@ def roll_1d100(): #get one roll from the list of up to 100 in the variable d100s
   RemovedFirstRoll = d100s.pop(0) #remove first value in global d100s variable
   return(RemovedFirstRoll)
 
-intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("?"), description="A dice bot using random.org")
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("?"), description="A dice bot using random.org", intents=intents)
 
 def roll_100_dice(DiceSides):
   IscusHeaders = {'Content-type': 'application/json', 'Accept': 'text/plain', 'User-Agent': 'Iscus Discord Bot, joshsays@gmail.com'}
@@ -183,6 +186,15 @@ def roll_100_dice(DiceSides):
   else:
     return()
 
+#function to use the random.org Sequence API to pick one integer from FactorCount
+def PickSequence(FactorCount):
+  IscusHeaders = {'Content-type': 'application/json', 'Accept': 'text/plain', 'User-Agent': 'Iscus Discord Bot, joshsays@gmail.com'}
+  APIkey = os.getenv('KEY')
+  response = requests.post('https://api.random.org/json-rpc/2/invoke', json={'jsonrpc':'2.0','method':'generateIntegerSequences','params':{'apiKey':APIkey,'n':1,'length':1,'min':1,'max':FactorCount,'replacement':False,'base':10},'id':42},headers=IscusHeaders)
+  json_data = json.loads(response.text)
+  ChosenOne = str(json_data['result']['random']['data'])
+  return(ChosenOne)
+
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you ?roll your fate..."))
@@ -202,23 +214,11 @@ async def about(ctx):
       > You can add a comment to a roll by adding a space after the roll expression and typing whatever you want, like: ?roll 1d100 Job Trident(85)
       > Type ?help about or just ?about to see this info later
 
-   **New Features in v2.1.1:**
-      > Added the command ?skill that will calculate your degree of success based on your skill % like: ?skill 46 Swim
-      >Fixed and issue with the the command ?skill for RuneQuest so a d100 result of >95 always fails.
-
-    **New Features in v2.0:**
-      > She now will respond in threads!
-      > *roll changed to ?roll to make it one less tap from a mobile phone
-      > No more need to type a * before a roll comment, you can now just leave a space like: ?roll 1d100 Job Sanity(92)
-      > Now supports minus signs in roll expressions like 2d6+1d4+2-1d3
-      > Added support for rolling d2's
-      > Better help documentation with ?help and ?help roll
-      > Added support for @Iscus ping or ?ping commands (replies if online/alive)
-      > Added some error handling to catch fat fingered roll formulas
-      > Improved uptime from: 1) Code change to reduce chance of bot going offline due to Discord API rate limiting, 2) Bot now hosted on a Docker container on Job's network, rather than on Replit.com's free service
+   **New Features in v3.0:**
+      > Made the bot compatible with the latest version of discord.py and Discord's new API
+      > Added the ?pick command to allow the GM to randomly pick from a list of comma separated names
 
     **Known issues:**
-      > Discord.py v2.x beta library used... Breaking changes may occur when the official version is released
       > Not all error handling cases discovered yet; I'm sure your fat fingers will point out bugs before long...
       > Only these dice types are supported: d100,d20, d12, d10, d8, d6, d4, d3, and d2.  You can't roll a d7 for example.
 
@@ -364,5 +364,19 @@ async def skill(ctx, Skill):
     else:
       messageReply = "Oops, something went wrong"
       await ctx.send(messageReply)
+
+#bot pick command
+@bot.command(name='pick', help='accepts any number of names separated by commas and randomly selects one of them.  Usually used by the GM to pick a victim... Example: ?pick Job,Brian,Dom,Ulrik')
+async def pick(ctx, Pick):
+  #store each name (string) in a List and test how many factors there are in the PickFactors, a factor being a string separated by a blank space
+  PickFactors = re.split(',', Pick)
+  FactorCount = int(len(PickFactors))
+  PickListPosition = PickSequence(FactorCount)
+  #line below removes brackets from the string value so it can be converted to int
+  PickListPosition = re.sub(r"[\[\]]",'',PickListPosition)
+  PickListPosition = int(PickListPosition) - 1
+  #line below converts the random value to start with 0 to correspond to the PickFactors list order and pops that value out of the string
+  LuckyVictim = PickFactors[PickListPosition]
+  await ctx.send("{} has been chosen by Fate...".format(LuckyVictim))
 
 bot.run(os.getenv('TOKEN'))
